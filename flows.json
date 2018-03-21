@@ -1,0 +1,472 @@
+[
+    {
+        "id": "f27d4b1d.b4fbd8",
+        "type": "tab",
+        "label": "PowerMeter",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ec2e503b.4736f",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "/dev/ttyS0",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": true
+    },
+    {
+        "id": "96668e04.b73a3",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-dark",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "value": "#097479",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#097479",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#000000",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#0eb8c0",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#097479",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            }
+        },
+        "site": {
+            "name": "Power Meter",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "52840f1d.7f7b",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Power Display",
+        "icon": "dashboard"
+    },
+    {
+        "id": "f0612c16.011e8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Display",
+        "tab": "52840f1d.7f7b",
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "b2f28e0f.37ec",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "PowerMeter",
+        "broker": "broker.shiftr.io",
+        "port": "1883",
+        "clientid": "zeroIoc01",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    },
+    {
+        "id": "43b054ca.74a8cc",
+        "type": "serial in",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "serial": "ec2e503b.4736f",
+        "x": 280,
+        "y": 320,
+        "wires": [
+            [
+                "2b2078d4.4167c8"
+            ]
+        ]
+    },
+    {
+        "id": "2b2078d4.4167c8",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "Numberize",
+        "func": "msg.payload = Number(msg.payload);\nflow.set('power', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 450,
+        "y": 320,
+        "wires": [
+            [
+                "15dffa71.3aec66",
+                "78af7685.326e78"
+            ]
+        ]
+    },
+    {
+        "id": "15dffa71.3aec66",
+        "type": "ui_chart",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "group": "f0612c16.011e8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 650,
+        "y": 400,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "78af7685.326e78",
+        "type": "ui_gauge",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "group": "f0612c16.011e8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "",
+        "label": "Watts",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 650,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d546864e.860de8",
+        "type": "serial out",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "serial": "ec2e503b.4736f",
+        "x": 710,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "bb5bab94.457808",
+        "type": "inject",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "",
+        "payload": "powerOffset 8!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 320,
+        "y": 180,
+        "wires": [
+            [
+                "f6842ff6.55b7c"
+            ]
+        ]
+    },
+    {
+        "id": "c38a950f.968178",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "BlankPlot",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 460,
+        "y": 400,
+        "wires": [
+            [
+                "15dffa71.3aec66"
+            ]
+        ]
+    },
+    {
+        "id": "90f9b0d3.77dae",
+        "type": "ui_template",
+        "z": "f27d4b1d.b4fbd8",
+        "group": "f0612c16.011e8",
+        "name": "Restart Plot",
+        "order": 9,
+        "width": "0",
+        "height": "0",
+        "format": "<md-button \n    ng-style=\"{color:'black', background:'lime'}\"\n    ng-disabled='false'\n    ng-click=\"send({payload:true})\">Restart Plot</md-button>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "templateScope": "local",
+        "x": 290,
+        "y": 400,
+        "wires": [
+            [
+                "c38a950f.968178"
+            ]
+        ]
+    },
+    {
+        "id": "f6842ff6.55b7c",
+        "type": "delay",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 520,
+        "y": 180,
+        "wires": [
+            [
+                "d546864e.860de8"
+            ]
+        ]
+    },
+    {
+        "id": "80e4a760.c08da8",
+        "type": "inject",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "",
+        "payload": "powerCal 1!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 310,
+        "y": 100,
+        "wires": [
+            [
+                "9786e701.b02778"
+            ]
+        ]
+    },
+    {
+        "id": "9786e701.b02778",
+        "type": "delay",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "6",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 520,
+        "y": 100,
+        "wires": [
+            [
+                "d546864e.860de8"
+            ]
+        ]
+    },
+    {
+        "id": "b5e78fc1.661a3",
+        "type": "inject",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "",
+        "payload": "bandwidth 2!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 310,
+        "y": 40,
+        "wires": [
+            [
+                "65a8ff6b.9e764"
+            ]
+        ]
+    },
+    {
+        "id": "65a8ff6b.9e764",
+        "type": "delay",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "7",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 520,
+        "y": 40,
+        "wires": [
+            [
+                "d546864e.860de8"
+            ]
+        ]
+    },
+    {
+        "id": "a3aea6d9.316df8",
+        "type": "mqtt out",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "PowerMeter",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "b2f28e0f.37ec",
+        "x": 670,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "90b668f2.58f108",
+        "type": "inject",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "1 Hz",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 270,
+        "y": 520,
+        "wires": [
+            [
+                "a02bb25b.290a7"
+            ]
+        ]
+    },
+    {
+        "id": "a02bb25b.290a7",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "Send Power Reading",
+        "func": "msg.topic = 'zeroIoc01/power/get/reading';\nmsg.payload = flow.get('power');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 460,
+        "y": 520,
+        "wires": [
+            [
+                "a3aea6d9.316df8"
+            ]
+        ]
+    }
+]
