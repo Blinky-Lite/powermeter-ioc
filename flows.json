@@ -7,6 +7,24 @@
         "info": ""
     },
     {
+        "id": "e9f7686a.74f588",
+        "type": "subflow",
+        "name": "Settings->Arduino",
+        "info": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "3b521254.b8ba1e"
+                    }
+                ]
+            }
+        ],
+        "out": []
+    },
+    {
         "id": "ec2e503b.4736f",
         "type": "serial-port",
         "z": "",
@@ -245,36 +263,6 @@
         "wires": []
     },
     {
-        "id": "d546864e.860de8",
-        "type": "serial out",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "serial": "ec2e503b.4736f",
-        "x": 710,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "bb5bab94.457808",
-        "type": "inject",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "topic": "",
-        "payload": "powerOffset 8!",
-        "payloadType": "str",
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "x": 320,
-        "y": 180,
-        "wires": [
-            [
-                "f6842ff6.55b7c"
-            ]
-        ]
-    },
-    {
         "id": "c38a950f.968178",
         "type": "function",
         "z": "f27d4b1d.b4fbd8",
@@ -312,124 +300,15 @@
         ]
     },
     {
-        "id": "f6842ff6.55b7c",
-        "type": "delay",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 520,
-        "y": 180,
-        "wires": [
-            [
-                "d546864e.860de8"
-            ]
-        ]
-    },
-    {
-        "id": "80e4a760.c08da8",
-        "type": "inject",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "topic": "",
-        "payload": "powerCal 1!",
-        "payloadType": "str",
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "x": 310,
-        "y": 100,
-        "wires": [
-            [
-                "9786e701.b02778"
-            ]
-        ]
-    },
-    {
-        "id": "9786e701.b02778",
-        "type": "delay",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "6",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 520,
-        "y": 100,
-        "wires": [
-            [
-                "d546864e.860de8"
-            ]
-        ]
-    },
-    {
-        "id": "b5e78fc1.661a3",
-        "type": "inject",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "topic": "",
-        "payload": "bandwidth 2!",
-        "payloadType": "str",
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "x": 310,
-        "y": 40,
-        "wires": [
-            [
-                "65a8ff6b.9e764"
-            ]
-        ]
-    },
-    {
-        "id": "65a8ff6b.9e764",
-        "type": "delay",
-        "z": "f27d4b1d.b4fbd8",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "7",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 520,
-        "y": 40,
-        "wires": [
-            [
-                "d546864e.860de8"
-            ]
-        ]
-    },
-    {
         "id": "a3aea6d9.316df8",
         "type": "mqtt out",
         "z": "f27d4b1d.b4fbd8",
-        "name": "PowerMeter",
-        "topic": "",
+        "name": "",
+        "topic": "power/zeroIoc01/readings/echo",
         "qos": "0",
         "retain": "true",
         "broker": "b2f28e0f.37ec",
-        "x": 670,
+        "x": 730,
         "y": 520,
         "wires": []
     },
@@ -457,15 +336,293 @@
         "id": "a02bb25b.290a7",
         "type": "function",
         "z": "f27d4b1d.b4fbd8",
-        "name": "Send Power Reading",
-        "func": "msg.topic = 'zeroIoc01/power/get/reading';\nmsg.payload = flow.get('power');\nreturn msg;",
+        "name": "Prepare Readings",
+        "func": "msg.topic = 'readings/echo';\nmsg.payload = {'power':flow.get('power')};\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 460,
+        "x": 450,
         "y": 520,
         "wires": [
             [
                 "a3aea6d9.316df8"
+            ]
+        ]
+    },
+    {
+        "id": "ad13f5e9.0d50a8",
+        "type": "inject",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "Init",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 250,
+        "y": 680,
+        "wires": [
+            [
+                "5c0712f4.b1659c"
+            ]
+        ]
+    },
+    {
+        "id": "5c0712f4.b1659c",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "Init Settings",
+        "func": "var powerMeterSettings = \n{\n    'topic':'powerMeterSettings',\n    'payload':\n    {\n        'bandwidth':2,\n        'powerCal':1,\n        'powerOffset':8\n    }\n};\nglobal.set('powerMeterSettings', powerMeterSettings);\nreturn powerMeterSettings;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 410,
+        "y": 680,
+        "wires": [
+            [
+                "175ebe95.0b3041"
+            ]
+        ]
+    },
+    {
+        "id": "3b521254.b8ba1e",
+        "type": "function",
+        "z": "e9f7686a.74f588",
+        "name": "Send Settings to Arduino",
+        "func": "var powerMeterSettings = global.get('powerMeterSettings');\nvar bandwidth = \n{\n    'topic':'bandwidth',\n    'payload':'bandwidth ' + powerMeterSettings.payload.bandwidth.toString() + '!'\n}\nvar powerCal = \n{\n    'topic':'powerCal',\n    'payload':'powerCal ' + powerMeterSettings.payload.powerCal.toString() + '!'\n}\nvar powerOffset = \n{\n    'topic':'powerOffset',\n    'payload':'powerOffset ' + powerMeterSettings.payload.powerOffset.toString() + '!'\n}\n\nreturn [bandwidth,powerCal,powerOffset];",
+        "outputs": 3,
+        "noerr": 0,
+        "x": 270,
+        "y": 120,
+        "wires": [
+            [
+                "835ffc0f.b816e"
+            ],
+            [
+                "a61d18ea.447348"
+            ],
+            [
+                "fba2feae.9cd8"
+            ]
+        ]
+    },
+    {
+        "id": "175ebe95.0b3041",
+        "type": "delay",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "4",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 560,
+        "y": 680,
+        "wires": [
+            [
+                "b25bf83a.16b6a8",
+                "211aa2bd.fb4dae"
+            ]
+        ]
+    },
+    {
+        "id": "fba2feae.9cd8",
+        "type": "delay",
+        "z": "e9f7686a.74f588",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 540,
+        "y": 160,
+        "wires": [
+            [
+                "9d7ecb39.e40a18"
+            ]
+        ]
+    },
+    {
+        "id": "a61d18ea.447348",
+        "type": "delay",
+        "z": "e9f7686a.74f588",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 540,
+        "y": 120,
+        "wires": [
+            [
+                "9d7ecb39.e40a18"
+            ]
+        ]
+    },
+    {
+        "id": "835ffc0f.b816e",
+        "type": "delay",
+        "z": "e9f7686a.74f588",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 540,
+        "y": 80,
+        "wires": [
+            [
+                "9d7ecb39.e40a18"
+            ]
+        ]
+    },
+    {
+        "id": "9d7ecb39.e40a18",
+        "type": "serial out",
+        "z": "e9f7686a.74f588",
+        "name": "",
+        "serial": "ec2e503b.4736f",
+        "x": 720,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "b25bf83a.16b6a8",
+        "type": "subflow:e9f7686a.74f588",
+        "z": "f27d4b1d.b4fbd8",
+        "x": 740,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "3b5fa96c.6b1cb6",
+        "type": "mqtt in",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "power/zeroIoc01/settings/get",
+        "qos": "0",
+        "broker": "b2f28e0f.37ec",
+        "x": 310,
+        "y": 800,
+        "wires": [
+            [
+                "211aa2bd.fb4dae"
+            ]
+        ]
+    },
+    {
+        "id": "211aa2bd.fb4dae",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "echo settings",
+        "func": "var powerMeterSettings = global.get('powerMeterSettings');\nreturn powerMeterSettings;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 800,
+        "wires": [
+            [
+                "8d3f334a.a3934"
+            ]
+        ]
+    },
+    {
+        "id": "8d3f334a.a3934",
+        "type": "mqtt out",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "power/zeroIoc01/settings/echo",
+        "qos": "0",
+        "retain": "true",
+        "broker": "b2f28e0f.37ec",
+        "x": 810,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "7eb5b4b4.3914dc",
+        "type": "mqtt in",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "topic": "power/zeroIoc01/settings/set",
+        "qos": "0",
+        "broker": "b2f28e0f.37ec",
+        "x": 300,
+        "y": 900,
+        "wires": [
+            [
+                "342b9613.651fca"
+            ]
+        ]
+    },
+    {
+        "id": "342b9613.651fca",
+        "type": "json",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 900,
+        "wires": [
+            [
+                "3e58c29.e05a53e"
+            ]
+        ]
+    },
+    {
+        "id": "e8005a4c.5fbdd8",
+        "type": "debug",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 950,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "3e58c29.e05a53e",
+        "type": "function",
+        "z": "f27d4b1d.b4fbd8",
+        "name": "",
+        "func": "msg.topic = 'powerMeterSettings';\nglobal.set('powerMeterSettings', msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 630,
+        "y": 900,
+        "wires": [
+            [
+                "e8005a4c.5fbdd8",
+                "b25bf83a.16b6a8",
+                "211aa2bd.fb4dae"
             ]
         ]
     }
